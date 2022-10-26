@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-q$$sqb4dry(0(rr!sa)+l1xfz*2z3*e5_p6&_*hg!3_c2a%l*_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 # Application definition
@@ -38,18 +40,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'rest_framework',
+    "corsheaders",
     # install app
     'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # custom middleware
+    'blog.middleware.SimpleMiddleware.SimpleMiddleware',
 ]
 
 ROOT_URLCONF = 'pythonTutorial.urls'
@@ -124,3 +133,26 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'blog.UserProfile'
+
+# CSRF_USE_SESSIONS = False
+# CSRF_COOKIE_HTTPONLY = False
+# CORS_ALLOW_HEADERS = ('x-csrftoken', 'authorization', 'content-type')
+# CORS_ORIGIN_ALLOW_ALL = True
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://*',
+#     'http://*.127.0.0.1',
+#     'http://localhost:3000'
+# ]
+
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',
+# ]
+
+CORS_ALLOW_ALL_ORIGINS  = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ('*')
+CORS_ALLOW_HEADERS = ('x-csrftoken', 'authorization', 'content-type')
