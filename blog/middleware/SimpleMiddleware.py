@@ -14,7 +14,6 @@ class SimpleMiddleware:
         # the view (and later middleware) are called.
         logger.warning('1.get_response之前')
         response = self.get_response(request)
-        print("啥")
         logger.warning('4.get_response之後')
         # Code to be executed for each request/response after
         # the view is called.

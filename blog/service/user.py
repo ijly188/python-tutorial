@@ -2,18 +2,34 @@ import json
 from blog.models import UserProfile
 
 class UserService:
-    def checkAccountExistByAccount(account):
+    def checkAccountExistByAccount(request):
+        data = json.loads(bytes.decode(request.body, "utf-8"))
+        account = data["account"]
+
         return UserProfile.objects.filter(account=account).first()
     
     def checkAccountPassword(account, password):
         return UserProfile.objects.filter(account=account, password=password).first()
     
-    def checkSessionPassword(request, password):
+    def checkAccountBySession(request):
+        data = json.loads(bytes.decode(request.body, "utf-8"))
+        password = data["password"]
+
         userId = UserService.getLoginUserId(request)
 
         return UserProfile.objects.filter(id=userId, password=password).first()
 
-    def createUser(account, first_name, last_name, email, phone, password):
+    def createUser(request):
+    # def createUser(account, first_name, last_name, email, phone, password):
+        data = json.loads(bytes.decode(request.body, "utf-8"))
+        account = data["account"]
+        email = data["email"]
+        first_name = data["first_name"]
+        last_name = data["last_name"]
+        password = data["password"]
+        phone = data["phone"]
+
+        # 可能要用 try catch 包
         user = UserProfile.objects.create_user(
             account = account,
             email = email,
@@ -24,6 +40,14 @@ class UserService:
         )
         user.set_password(password)
         user.save()
+
+        user_id = user.id
+
+        if(user_id != None):
+            return user_id
+        else:
+            return None
+        
 
     def updateUserInfo(request):
         data = json.loads(bytes.decode(request.body, "utf-8"))
