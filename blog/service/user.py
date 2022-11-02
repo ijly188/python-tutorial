@@ -20,7 +20,6 @@ class UserService:
         return UserProfile.objects.filter(id=userId, password=password).first()
 
     def createUser(request):
-    # def createUser(account, first_name, last_name, email, phone, password):
         data = json.loads(bytes.decode(request.body, "utf-8"))
         account = data["account"]
         email = data["email"]
@@ -84,12 +83,18 @@ class UserService:
     
     def getLoginUserId(request):
         return request.session.get('_auth_user_id')
+    
+    def getLoginUserAccount(request):
+        return request.session.get('account')
 
     def getUserInfoBySession(request):
         userId = UserService.getLoginUserId(request)
 
         return UserProfile.objects.filter(id=userId).values()
-
+    
+    def getUserInfoByUserId(userId):
+        return UserProfile.objects.filter(id=userId).values()
+    
     def getReturnUserInfoJson(request):
         memberInfo = list(UserService.getUserInfoBySession(request))[0]
 

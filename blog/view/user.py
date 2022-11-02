@@ -49,17 +49,15 @@ def login(request):
             result = responseHandlerClass.returnResult(responseHandlerClass("typeError", "登入驗證錯誤", validatorResult, ''))
 
         else:
-            data = json.loads(bytes.decode(request.body, "utf-8"))
-
-            # 其實這邊要寫 validator
-            account = data["account"]
-            password = data["password"]
-            
-            auth_obj = auth.authenticate(username=account, password=password)
 
             try:
                 if auth_obj is not None :
                     if UserService.isLogin(request) == False:
+                        data = json.loads(bytes.decode(request.body, "utf-8"))
+                        account = data["account"]
+                        password = data["password"]
+                        
+                        auth_obj = auth.authenticate(username=account, password=password)
                         auth_obj.check_password(password)
                         request.session.create()
                         auth.login(request, auth_obj)

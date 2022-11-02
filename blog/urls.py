@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
-from blog.view import article as articleController
-from blog.view import user as userController
+from blog.view import article as articleView
+from blog.view import user as userView
 
 urlpatterns = [
     path('', views.index, name = "index"),
@@ -9,18 +9,20 @@ urlpatterns = [
     # test router
     
     # article
-    path('articles', articleController.articleList, name = "articleList"),
+    path('articles', articleView.articleList, name = "articleList"),
     # createArticle
+    path('create-article', articleView.createArticle, name = "createArticle"),
     # getArticleById
     # updateArticle
     # deleteArticleById
-    path('author', articleController.author, name = 'author'),
+
+    path('author', articleView.author, name = 'author'),
 
     # member
-    path('register', userController.register, name = "register"),
-    path('login', userController.login, name = "login"),
-    path('logout', userController.logout, name = "logout"),
-    path('member-info', userController.getMemberInfo, name = "getMemberInfo"),
-    path('member-update', userController.updateMemberInfo, name = "updateMemberInfo"),
-    path('forget-password', userController.forgetPassword, name = "forgetPassword"),
+    path('register', userView.register, name = "register"),
+    path('login', userView.login, name = "login"),
+    path('logout', userView.logout, name = "logout"),
+    path('member-info', userView.getMemberInfo, name = "getMemberInfo"),
+    path('member-update', userView.updateMemberInfo, name = "updateMemberInfo"),
+    path('forget-password', userView.forgetPassword, name = "forgetPassword"),
 ]
