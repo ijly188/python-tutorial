@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+import datetime
+import logging
+import time
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -159,3 +162,56 @@ CORS_ALLOW_HEADERS = ('x-csrftoken', 'authorization', 'content-type')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ['http://*']
+
+todayDate = str(time.strftime("%Y%m%d", time.localtime()))
+
+todayLogPath = os.path.join(BASE_DIR, 'logs', todayDate)
+os.makedirs(todayLogPath, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    
+    'disable_existing_loggers': False, 
+    
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] [{levelname:8}] [{module}.{funcName}] [{pathname}:{lineno:3}] {process:d}/p {thread:d}/t {message}',
+            'style': '{',
+        },
+        
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        
+        'default': {    
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', todayDate, 'log.txt'),
+            'maxBytes': 1024 * 1024 * 50,
+            'backupCount': 3,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        }
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['default', 'console'],
+            'level': 'DEBUG',
+            'propagate': True, 
+        },
+        'collect': {     
+            'handlers': ['console'],
+            'level': 'INFO',
+        },   
+    }
+}

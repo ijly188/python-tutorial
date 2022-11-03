@@ -1,8 +1,15 @@
 import json
-
+import logging
 from blog.validation.validator import validatorClass
 
+logger = logging.getLogger('django')
 class UserValidator:
+    logger.debug('debug 紀錄此訊息')
+    logger.info('info 紀錄此訊息')
+    logger.warning('warning 紀錄此訊息')
+    logger.error('error 紀錄此訊息')
+    logger.critical('critical 紀錄此訊息')
+    
     def registerValidator(request):
         data = json.loads(bytes.decode(request.body, "utf-8"))
 

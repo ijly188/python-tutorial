@@ -1,7 +1,8 @@
 from django.http import Http404, HttpResponse, HttpResponseForbidden
 import logging
+from blog.service.user import UserService
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 class SimpleMiddleware:
     def __init__(self, get_response):
@@ -12,9 +13,15 @@ class SimpleMiddleware:
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        logger.warning('1.get_response之前')
+        # logger.warning('1.get_response之前')
         response = self.get_response(request)
-        logger.warning('4.get_response之後')
+        # logger.warning('4.get_response之後')
+        account = UserService.getUserInfoBySession(request)[0]["account"]
+        requestMethod = request.method
+        requestPath = request.path
+        responseStatusCode = str(response.status_code)
+        accessMsg = 'accessLog: ' + account + ' ' + requestMethod + ' ' + requestPath + ' ' + responseStatusCode
+        logger.info( accessMsg )
         # Code to be executed for each request/response after
         # the view is called.
         return response
@@ -38,7 +45,7 @@ class SimpleMiddleware:
                 print("尼沒有驗證")
                 return HttpResponseForbidden()
 
-        logger.warning('2. between req and res')
+        # logger.warning('2. between req and res')
         return None
 
     def process_exception(self, request, exception):
@@ -49,5 +56,5 @@ class SimpleMiddleware:
 
     def process_template_response(self, request, response):
         # return TemplateResponse object(render相關)
-        logger.warning('3. view之後 ')
+        # logger.warning('3. view之後 ')
         return response
